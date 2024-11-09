@@ -48,6 +48,7 @@ func ESClientConnection() {
 	}
 
 	res, _ := client.Info()
+
 	log.Println(res)
 
 	ESClient = client

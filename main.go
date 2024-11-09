@@ -8,19 +8,18 @@ import (
 )
 
 func main() {
-	//fmt.Println("Hello, World!")
 	addr := ":8087"
 
-	//создаем пустую БД
+	// Создаем пустую БД
 	models.ConnectDatabase()
 	models.DBMigrate()
 
-	//подключаем ElasticSearch
+	// Подключаем ElasticSearch
 	models.ESClientConnection()
-	//создаем индекс в ElasticSearch
+	// Создаем индекс в ElasticSearch
 	models.ESCreateIndexIfNotExist()
 
-	//создаем роутер
+	// Создаем роутер
 	mux := http.NewServeMux()
 
 	// В хендлере будем использовать параметры пути ({id}). Введены в go 1.22.
@@ -28,7 +27,7 @@ func main() {
 	mux.HandleFunc("GET /blogs/{id}", controllers.BlogsShow)
 	mux.HandleFunc("POST /blogs/index", controllers.BlogsBuildSearchIndex)
 
-	//запускаем сервер
+	// Запускаем сервер
 	log.Printf("server is listening at %s", addr)
 	log.Fatal(http.ListenAndServe(addr, mux))
 }
