@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	// Адрес клиента
 	addr := ":8087"
 
 	// Создаем пустую БД
@@ -16,6 +17,7 @@ func main() {
 
 	// Подключаем ElasticSearch
 	models.ESClientConnection()
+
 	// Создаем индекс в ElasticSearch
 	models.ESCreateIndexIfNotExist()
 
@@ -29,5 +31,8 @@ func main() {
 
 	// Запускаем сервер
 	log.Printf("server is listening at %s", addr)
-	log.Fatal(http.ListenAndServe(addr, mux))
+	err := http.ListenAndServe(addr, mux)
+	if err != nil {
+		log.Fatal()
+	}
 }
