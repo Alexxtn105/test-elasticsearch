@@ -1,15 +1,21 @@
 package main
 
 import (
+	"github.com/gin-gonic/gin"
 	"log"
-	"net/http"
 	"test-elasticsearch/controllers"
 	"test-elasticsearch/models"
 )
 
+var addr = ":8087"
+
 func main() {
 	// Адрес клиента
-	addr := ":8087"
+	r := gin.Default()
+	r.Use(gin.Logger())
+
+	// подгружаем шаблоны страниц
+	r.LoadHTMLGlob("templates/**/*")
 
 	// Создаем пустую БД
 	models.ConnectDatabase()
@@ -21,18 +27,27 @@ func main() {
 	// Создаем индекс в ElasticSearch
 	models.ESCreateIndexIfNotExist()
 
-	// Создаем роутер
-	mux := http.NewServeMux()
+	r.GET("/blogs", controllers.BlogsIndex)
+	r.GET("/blogs/:id", controllers.BlogsShow)
+	r.POST("/blogs/index", controllers.BlogsBuildSearchIndex)
 
-	// В хендлере будем использовать параметры пути ({id}). Введены в go 1.22.
-	// Можно посмотреть видео: https://www.youtube.com/watch?v=H7tbjKFSg58&t=48s
-	mux.HandleFunc("GET /blogs/{id}", controllers.BlogsShow)
-	mux.HandleFunc("POST /blogs/index", controllers.BlogsBuildSearchIndex)
-
-	// Запускаем сервер
 	log.Printf("server is listening at %s", addr)
-	err := http.ListenAndServe(addr, mux)
-	if err != nil {
-		log.Fatal()
-	}
+	r.Run(addr)
+	//region //Стандартный роутер
+	//// Создаем роутер
+	//mux := http.NewServeMux()
+	//
+	//// В хендлере будем использовать параметры пути ({id}). Введены в go 1.22.
+	//// Можно посмотреть видео: https://www.youtube.com/watch?v=H7tbjKFSg58&t=48s
+	////mux.HandleFunc("GET /blogs", controllers.BlogsIndex)
+	//mux.HandleFunc("GET /blogs/{id}", controllers.BlogsShow)
+	//mux.HandleFunc("POST /blogs/index", controllers.BlogsBuildSearchIndex)
+	//
+	//// Запускаем сервер
+	//log.Printf("server is listening at %s", addr)
+	//err := http.ListenAndServe(addr, mux)
+	//if err != nil {
+	//	log.Fatal()
+	//}
+	//endregion
 }
