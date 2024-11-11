@@ -9,14 +9,34 @@ import (
 )
 
 func BlogsIndex(c *gin.Context) {
-	blogs := models.BlogsAll()
-	c.HTML(
-		http.StatusOK,
-		"blogs/index.tpl",
-		gin.H{
-			"blogs": blogs,
-		},
-	)
+	//берем запрос (не параметр!!) `query` из адресной строки вида http://localhost:8087/blogs?query=commando
+	query := c.Query("query")
+
+	var blogs *[]models.Blog
+
+	// если query не пустой, выполняем запрос на поиск
+	if query != "" {
+		//поиск по заданной строке
+		blogs = models.BlogSearch(query)
+		c.HTML(
+			http.StatusOK,
+			"blogs/index.tpl",
+			gin.H{
+				"blogs": blogs,
+			},
+		)
+	} else {
+		//выводим все не удаленные блоги
+		blogs = models.BlogsAll()
+		c.HTML(
+			http.StatusOK,
+			"blogs/index.tpl",
+			gin.H{
+				"blogs": blogs,
+			},
+		)
+	}
+
 }
 
 func BlogsShow(c *gin.Context) {

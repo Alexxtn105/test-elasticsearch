@@ -7,7 +7,7 @@
 
             <div class="search-form">
                 <form action="/blogs" method="GET">
-                    <input type="text" name="query" placeholder="">
+                    <input type="text" name="query" placeholder="Search..." required>
                     <input type="submit" value="Search">
                  </form>
             </div>

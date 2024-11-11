@@ -74,3 +74,64 @@ func (b *Blog) AddToIndex() {
 
 	log.Printf("Индексирован документ %s в индекс %s\n", resp.String(), SearchIndex)
 }
+
+// BlogSearch Возвращает результат запроса по поиску
+func BlogSearch(searchQuery string) *[]Blog {
+	var buf bytes.Buffer
+
+	// Создаем понятный для ElasticSearch запрос (это специально сформированная хеш-таблица)
+	query := map[string]any{
+		"query": map[string]any{ // query - мапа, специфичная для языка запросов elasticsearch
+			"multi_match": map[string]any{ // multi_match - специальный запрос по поиску в нескольких полях
+				"query":  searchQuery,                  // это ключевое поле для поиска (что ищем)
+				"fields": []string{"title", "content"}, // тут описываем поля, в которых искать (где конкретно ищем)
+			},
+		},
+	}
+
+	// Преобразуем запрос в JSON, который понимает ElasticSearch
+	if err := json.NewEncoder(&buf).Encode(query); err != nil {
+		log.Fatalf("Error encoding query: %s", err)
+	}
+
+	// Выполняем запрос
+	res, err := ESClient.Search(
+		ESClient.Search.WithIndex(SearchIndex),
+		ESClient.Search.WithBody(&buf),
+	)
+
+	// Обязательно закрываем тело ответа
+	defer res.Body.Close()
+
+	if err != nil || res.IsError() {
+		return nil
+	}
+
+	// декодируем результат поиска из JSON в мапу
+	var r map[string]any
+	if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
+		return nil
+	}
+
+	// извлекаем ИД записей, удовлетворяющих условию поиска из тела запроса
+	var ids []uint
+	if hits, ok := r["hits"].(map[string]any); ok {
+		if hitsHits, ok := hits["hits"].([]any); ok {
+			for _, hit := range hitsHits {
+				if hitMap, ok := hit.(map[string]any); ok {
+					if idStr, ok := hitMap["_id"].(string); ok {
+						id, _ := strconv.Atoi(idStr)
+						ids = append(ids, uint(id))
+					}
+				}
+			}
+		}
+	}
+
+	// по извлеченным из ElasticSearch ИД находим соответствующие записи в БД
+	var blogs []Blog
+
+	DB.Where("deleted_at IS NULL").Where("id in ?", ids).Order("updated_at desc").Find(&blogs)
+
+	return &blogs
+}
