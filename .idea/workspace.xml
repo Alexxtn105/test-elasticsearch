@@ -5,16 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f1622f08-9b64-4659-bbc2-edb13aa1f714" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/templates/blogs/index.tpl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/layouts/header.tpl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/blogs_build_search_index.go" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/blogs_build_search_index.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/blogs_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/blogs_controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/database.db" beforeDir="false" afterPath="$PROJECT_DIR$/storage/database.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/golang.org/x/text/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/golang.org/x/text/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/modules.txt" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/modules.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/layouts/footer.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/templates/layouts/footer.tpl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +67,7 @@
       <workItem from="1730902858597" duration="8514000" />
       <workItem from="1730919671923" duration="30000" />
       <workItem from="1731169936122" duration="7408000" />
-      <workItem from="1731338275488" duration="2897000" />
+      <workItem from="1731338275488" duration="3459000" />
     </task>
     <servers />
   </component>
